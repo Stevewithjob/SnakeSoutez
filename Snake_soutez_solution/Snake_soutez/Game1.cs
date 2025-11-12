@@ -11,8 +11,8 @@ namespace Snake_soutez
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
-        private const int GridSize = 25;
-        private const int CellSize = 25;
+        private const int GridSize = 30;
+        private const int CellSize = 30;
         private Texture2D pixelTexture;
 
         // Snake 1 (WASD)
@@ -38,7 +38,7 @@ namespace Snake_soutez
 
         private float moveTimer = 0f;
         private float moveInterval = 0.3f; // pomalí hadi
-        private float bulletMoveInterval = 0.03f; // rychlé střely
+        private float bulletMoveInterval = 0.08f; // rychlé střely
         private float bulletMoveTimer = 0f;
 
         private KeyboardState previousKeyState;
@@ -299,14 +299,19 @@ namespace Snake_soutez
             _spriteBatch.Begin();
 
             // Draw checkerboard background
-            for (int i = 0; i < GridSize; i++)
-            {
-                for (int j = 0; j < GridSize; j++)
-                {
-                    Color bgColor = (i + j) % 2 == 0 ? Color.SandyBrown : Color.Peru;
-                    _spriteBatch.Draw(pixelTexture, new Rectangle(i * CellSize, j * CellSize, CellSize, CellSize), bgColor);
-                }
-            }
+            //for (int i = 0; i < GridSize; i++)
+            //{
+            //    for (int j = 0; j < GridSize; j++)
+            //    {
+            //        Color bgColor = (i + j) % 2 == 0 ? Color.SandyBrown : Color.Peru;
+            //        _spriteBatch.Draw(pixelTexture, new Rectangle(i * CellSize, j * CellSize, CellSize, CellSize), bgColor);
+            //    }
+            //}
+
+            // Blue background
+            _spriteBatch.Draw(pixelTexture,
+                new Rectangle(0, 0, GridSize * CellSize, GridSize * CellSize),
+                Color.CornflowerBlue); // nebo třeba Color.Blue
 
             // Draw snake 1
             for (int i = 0; i < snake1.Count; i++)
