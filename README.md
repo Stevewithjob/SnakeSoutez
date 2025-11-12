@@ -1,2 +1,2 @@
-# SnakeSout-
+# SnakeSoutez
 Speciální Snake gameska
