@@ -1,0 +1,2 @@
+# SnakeSout-
+Speciální Snake gameska
