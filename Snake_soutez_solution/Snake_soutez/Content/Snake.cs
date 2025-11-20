@@ -15,6 +15,8 @@ namespace Snake_soutez
         public Color BodyColor { get; set; }
         public int PlayerNumber { get; private set; }
 
+        public int Lives { get; set; }
+
         public Snake(int playerNumber, Point startPosition, Direction startDirection, Color bodyColor, Color headColor)
         {
             PlayerNumber = playerNumber;
@@ -32,6 +34,7 @@ namespace Snake_soutez
             BodyColor = bodyColor;
             HeadColor = headColor;
             Ammo = 0;
+            Lives = 3;
         }
 
         public void Move()
@@ -56,6 +59,16 @@ namespace Snake_soutez
         public bool CheckSelfCollision()
         {
             return Body.Skip(1).Contains(Body[0]);
+        }
+
+        public bool IsAlive()
+        {
+            return Lives > 0;
+        }
+
+        public void LoseLife()
+        {
+            Lives--;
         }
 
         public bool CheckWallCollision(int gridSize)

@@ -23,7 +23,7 @@ namespace Snake_soutez
         private GameState gameState;
 
         private float moveTimer = 0f;
-        private float moveInterval = 0.15f;
+        private float moveInterval = 0.3f;
         private float bulletMoveInterval = 0.05f;
         private float bulletMoveTimer = 0f;
 
@@ -162,11 +162,25 @@ namespace Snake_soutez
                 // Check bullet collision with snakes
                 if (bullets[i].Shooter == 1 && snake2.CheckCollision(bullets[i].Position))
                 {
-                    gameState.SetWinner("CERVENY HAD (WASD) VYHRAL!");
+                    snake2.LoseLife();
+                    bullets.RemoveAt(i);
+
+                    if (!snake2.IsAlive())
+                    {
+                        gameState.SetWinner("CERVENY HAD (WASD) VYHRAL!");
+                    }
+                    continue;
                 }
                 else if (bullets[i].Shooter == 2 && snake1.CheckCollision(bullets[i].Position))
                 {
-                    gameState.SetWinner("MODRY HAD (SIPKY) VYHRAL!");
+                    snake1.LoseLife();
+                    bullets.RemoveAt(i);
+
+                    if (!snake1.IsAlive())
+                    {
+                        gameState.SetWinner("MODRY HAD (SIPKY) VYHRAL!");
+                    }
+                    continue;
                 }
             }
         }
@@ -272,6 +286,15 @@ namespace Snake_soutez
 
                 if (gameState.IsGameOver)
                 {
+                    _spriteBatch.DrawString(font, $"Cerveny naboje: {snake1.Ammo}",
+                        new Vector2(10, 10), Color.Red);
+                    _spriteBatch.DrawString(font, $"Cerveny zivoty: {snake1.Lives}",   // NOVÉ!
+                        new Vector2(10, 30), Color.Red);                                // NOVÉ!
+
+                    _spriteBatch.DrawString(font, $"Modry naboje: {snake2.Ammo}",
+                        new Vector2(GridSize * CellSize - 200, 10), Color.Blue);
+                    _spriteBatch.DrawString(font, $"Modry zivoty: {snake2.Lives}",     // NOVÉ!
+                        new Vector2(GridSize * CellSize - 200, 30), Color.Blue);        // NOVÉ!
                     Vector2 textSize = font.MeasureString(gameState.Winner);
                     Vector2 position = new Vector2((GridSize * CellSize - textSize.X) / 2,
                         (GridSize * CellSize - textSize.Y) / 2);
