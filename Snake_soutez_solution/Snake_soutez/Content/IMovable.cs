@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Snake_soutez.Content
+﻿namespace Snake_soutez
 {
-    internal class Class1
+    public interface IMovable
     {
+        void Move();
+        Direction CurrentDirection { get; set; }
     }
 }
