@@ -12,7 +12,7 @@ namespace Snake_soutez
         private SpriteBatch _spriteBatch;
 
         private const int GridSize = 30;
-        private const int CellSize = 30;
+        private const int CellSize = 50;
         private Texture2D pixelTexture;
 
         // Snake 1 (WASD)
@@ -38,7 +38,7 @@ namespace Snake_soutez
 
         private float moveTimer = 0f;
         private float moveInterval = 0.3f; // pomalí hadi
-        private float bulletMoveInterval = 0.08f; // rychlé střely
+        private float bulletMoveInterval = 0.05f; // rychlé střely
         private float bulletMoveTimer = 0f;
 
         private KeyboardState previousKeyState;
