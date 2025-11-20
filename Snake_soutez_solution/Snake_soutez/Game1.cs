@@ -310,6 +310,8 @@ namespace Snake_soutez
                     _spriteBatch.DrawString(font, restartText,
                         new Vector2((GridSize * CellSize - restartSize.X) / 2, position.Y + 40),
                         Color.Yellow);
+
+
                 }
             }
 
