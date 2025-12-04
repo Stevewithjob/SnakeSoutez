@@ -21,6 +21,7 @@ namespace Snake_soutez
         private Direction direction1 = Direction.Right;
         private Direction nextDirection1 = Direction.Right;
         private int ammo1 = 0;
+        private int lives1 = 3;
         private Color snake1Color = new Color(139, 69, 19);
 
         // Snake 2 (Arrows)
@@ -28,6 +29,7 @@ namespace Snake_soutez
         private Direction direction2 = Direction.Left;
         private Direction nextDirection2 = Direction.Left;
         private int ammo2 = 0;
+        private int lives2 = 3;
         private Color snake2Color = new Color(85, 107, 47);
 
         // Food and bullets
@@ -71,7 +73,6 @@ namespace Snake_soutez
 
         private void InitializeGame()
         {
-            // Initialize snakes
             snake1.Clear();
             snake1.Add(new Point(5, 12));
             snake1.Add(new Point(4, 12));
@@ -113,13 +114,11 @@ namespace Snake_soutez
 
         private void ResetGame()
         {
-            // Vyčisti seznamy
             snake1.Clear();
             snake2.Clear();
             bullets.Clear();
             particles.Clear();
 
-            // Resetuj hady
             snake1.Add(new Point(5, 12));
             snake1.Add(new Point(4, 12));
             snake1.Add(new Point(3, 12));
@@ -128,24 +127,22 @@ namespace Snake_soutez
             snake2.Add(new Point(20, 12));
             snake2.Add(new Point(21, 12));
 
-            // Resetuj směry
             direction1 = Direction.Right;
             nextDirection1 = Direction.Right;
             direction2 = Direction.Left;
             nextDirection2 = Direction.Left;
 
-            // Resetuj náboje
             ammo1 = 0;
             ammo2 = 0;
+            lives1 = 3;
+            lives2 = 3;
 
-            // Resetuj stav hry
             gameOver = false;
             winner = "";
             screenShake = Vector2.Zero;
             moveTimer = 0f;
             bulletMoveTimer = 0f;
 
-            // Spawn nové jídlo
             SpawnFood();
         }
 
@@ -156,12 +153,10 @@ namespace Snake_soutez
 
             KeyboardState keyState = Keyboard.GetState();
 
-            // Screen shake update
             screenShake *= 0.85f;
             if (screenShake.Length() < 0.1f)
                 screenShake = Vector2.Zero;
 
-            // Particles update
             for (int i = particles.Count - 1; i >= 0; i--)
             {
                 particles[i].Update();
@@ -169,7 +164,6 @@ namespace Snake_soutez
                     particles.RemoveAt(i);
             }
 
-            // Reset po game over
             if (gameOver)
             {
                 if (keyState.IsKeyDown(Keys.R) && previousKeyState.IsKeyUp(Keys.R))
@@ -221,7 +215,6 @@ namespace Snake_soutez
 
             previousKeyState = keyState;
 
-            // Game loop timer
             moveTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
             bulletMoveTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
@@ -326,17 +319,48 @@ namespace Snake_soutez
                     continue;
                 }
 
+                // Zásah do Snake 2
                 if (bullets[i].Shooter == 1 && snake2.Contains(bullets[i].Position))
                 {
                     CreateHitEffect(bullets[i].Position);
-                    gameOver = true;
-                    winner = "CERVENY HAD VYHRAL!";
+                    bullets.RemoveAt(i);
+
+                    lives2--;
+
+                    // Odeber segment ze snake 2
+                    if (snake2.Count > 1)
+                    {
+                        snake2.RemoveAt(snake2.Count - 1);
+                    }
+
+                    if (lives2 <= 0)
+                    {
+                        gameOver = true;
+                        winner = "CERVENY HAD VYHRAL!";
+                    }
+                    continue;
                 }
-                else if (bullets[i].Shooter == 2 && snake1.Contains(bullets[i].Position))
+
+                // Zásah do Snake 1
+                if (bullets[i].Shooter == 2 && snake1.Contains(bullets[i].Position))
                 {
                     CreateHitEffect(bullets[i].Position);
-                    gameOver = true;
-                    winner = "ZELENY HAD VYHRAL!";
+                    bullets.RemoveAt(i);
+
+                    lives1--;
+
+                    // Odeber segment ze snake 1
+                    if (snake1.Count > 1)
+                    {
+                        snake1.RemoveAt(snake1.Count - 1);
+                    }
+
+                    if (lives1 <= 0)
+                    {
+                        gameOver = true;
+                        winner = "ZELENY HAD VYHRAL!";
+                    }
+                    continue;
                 }
             }
         }
@@ -540,11 +564,14 @@ namespace Snake_soutez
 
             if (font != null)
             {
-                _spriteBatch.DrawString(font, $"Cerveny: {ammo1}", new Vector2(11, 11), Color.Black * 0.5f);
-                _spriteBatch.DrawString(font, $"Cerveny: {ammo1}", new Vector2(10, 10), new Color(180, 80, 20));
+                // Zobraz životy a náboje
+                _spriteBatch.DrawString(font, $"Cerveny: {ammo1} naboju | {lives1} zivoty", new Vector2(11, 11), Color.Black * 0.5f);
+                _spriteBatch.DrawString(font, $"Cerveny: {ammo1} naboju | {lives1} zivoty", new Vector2(10, 10), new Color(180, 80, 20));
 
-                _spriteBatch.DrawString(font, $"Zeleny: {ammo2}", new Vector2(GridSize * CellSize - 109, 11), Color.Black * 0.5f);
-                _spriteBatch.DrawString(font, $"Zeleny: {ammo2}", new Vector2(GridSize * CellSize - 110, 10), new Color(100, 130, 50));
+                string greenText = $"Zeleny: {ammo2} naboju | {lives2} zivoty";
+                Vector2 greenSize = font.MeasureString(greenText);
+                _spriteBatch.DrawString(font, greenText, new Vector2(GridSize * CellSize - greenSize.X - 9, 11), Color.Black * 0.5f);
+                _spriteBatch.DrawString(font, greenText, new Vector2(GridSize * CellSize - greenSize.X - 10, 10), new Color(100, 130, 50));
 
                 if (gameOver)
                 {
